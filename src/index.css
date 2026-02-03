@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .game-cell {
+    @apply transition-all duration-100 ease-in-out;
+  }
+  
+  .snake-head {
+    @apply transform scale-110;
+  }
+  
+  .food-pulse {
+    animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: .8;
+      transform: scale(1.1);
+    }
+  }
+}
