@@ -1,4 +1,4 @@
-import { Trophy, Zap, Gauge } from 'lucide-react';
+import { Trophy, Zap, Target } from 'lucide-react';
 
 interface ScoreBoardProps {
   score: number;
@@ -8,29 +8,29 @@ interface ScoreBoardProps {
 
 export default function ScoreBoard({ score, highScore, speed }: ScoreBoardProps) {
   return (
-    <div className="grid grid-cols-3 gap-4 mb-6">
-      <div className="bg-gray-800 rounded-lg p-4 text-center">
-        <div className="flex items-center justify-center gap-2 text-gray-400 mb-1">
-          <Zap size={20} />
-          <span className="text-sm font-medium">Счёт</span>
+    <div className="grid grid-cols-3 gap-4 w-full max-w-md">
+      <div className="bg-gray-800/50 backdrop-blur rounded-lg p-3 text-center">
+        <div className="flex items-center justify-center gap-2 text-green-400 mb-1">
+          <Target className="w-4 h-4" />
+          <span className="text-sm font-semibold">Score</span>
         </div>
-        <div className="text-3xl font-bold text-white">{score}</div>
+        <p className="text-2xl font-bold">{score}</p>
       </div>
-
-      <div className="bg-gray-800 rounded-lg p-4 text-center">
-        <div className="flex items-center justify-center gap-2 text-gray-400 mb-1">
-          <Trophy size={20} />
-          <span className="text-sm font-medium">Рекорд</span>
+      
+      <div className="bg-gray-800/50 backdrop-blur rounded-lg p-3 text-center">
+        <div className="flex items-center justify-center gap-2 text-yellow-400 mb-1">
+          <Trophy className="w-4 h-4" />
+          <span className="text-sm font-semibold">Best</span>
         </div>
-        <div className="text-3xl font-bold text-yellow-500">{highScore}</div>
+        <p className="text-2xl font-bold">{highScore}</p>
       </div>
-
-      <div className="bg-gray-800 rounded-lg p-4 text-center">
-        <div className="flex items-center justify-center gap-2 text-gray-400 mb-1">
-          <Gauge size={20} />
-          <span className="text-sm font-medium">Скорость</span>
+      
+      <div className="bg-gray-800/50 backdrop-blur rounded-lg p-3 text-center">
+        <div className="flex items-center justify-center gap-2 text-blue-400 mb-1">
+          <Zap className="w-4 h-4" />
+          <span className="text-sm font-semibold">Speed</span>
         </div>
-        <div className="text-3xl font-bold text-green-500">{speed}</div>
+        <p className="text-2xl font-bold">{speed}</p>
       </div>
     </div>
   );

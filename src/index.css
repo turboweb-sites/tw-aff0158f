@@ -2,26 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-gray-900 text-white;
+  }
+}
+
 @layer components {
   .game-cell {
-    @apply transition-all duration-100 ease-in-out;
+    @apply absolute transition-all duration-100 ease-linear;
   }
   
   .snake-head {
-    @apply transform scale-110;
+    @apply bg-gradient-to-br from-green-400 to-green-600 rounded-sm shadow-lg shadow-green-500/50;
+    animation: pulse 1s infinite;
   }
   
-  .food-pulse {
-    animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .snake-body {
+    @apply bg-gradient-to-br from-green-500 to-green-700 rounded-sm;
+  }
+  
+  .food {
+    @apply bg-gradient-to-br from-red-400 to-red-600 rounded-full shadow-lg shadow-red-500/50;
+    animation: food-pulse 0.5s infinite alternate;
   }
   
   @keyframes pulse {
     0%, 100% {
-      opacity: 1;
       transform: scale(1);
     }
     50% {
-      opacity: .8;
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes food-pulse {
+    0% {
+      transform: scale(0.9);
+    }
+    100% {
       transform: scale(1.1);
     }
   }

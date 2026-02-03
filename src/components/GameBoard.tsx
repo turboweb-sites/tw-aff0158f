@@ -1,77 +1,76 @@
-import { GameState, Position } from '../types/game';
+import { GameState, GRID_SIZE, CELL_SIZE } from '../types/game';
 
 interface GameBoardProps {
   gameState: GameState;
 }
 
 export default function GameBoard({ gameState }: GameBoardProps) {
-  const { snake, food, isGameOver, isPaused } = gameState;
-  const boardSize = 20;
-
-  const isSnakeHead = (pos: Position) => 
-    snake[0].x === pos.x && snake[0].y === pos.y;
-
-  const isSnakeBody = (pos: Position) => 
-    snake.some((segment, index) => index > 0 && segment.x === pos.x && segment.y === pos.y);
-
-  const isFood = (pos: Position) => 
-    food.x === pos.x && food.y === pos.y;
-
-  const getCellClass = (pos: Position) => {
-    if (isSnakeHead(pos)) {
-      return 'bg-snake-head shadow-lg snake-head';
-    }
-    if (isSnakeBody(pos)) {
-      const index = snake.findIndex(segment => segment.x === pos.x && segment.y === pos.y);
-      const opacity = 1 - (index / snake.length) * 0.3;
-      return `bg-snake-body shadow-md`;
-    }
-    if (isFood(pos)) {
-      return 'bg-food food-pulse shadow-lg';
-    }
-    return 'bg-cell';
-  };
-
-  const getCellStyle = (pos: Position) => {
-    if (isSnakeBody(pos)) {
-      const index = snake.findIndex(segment => segment.x === pos.x && segment.y === pos.y);
-      const opacity = 1 - (index / snake.length) * 0.3;
-      return { opacity };
-    }
-    return {};
-  };
+  const boardSize = GRID_SIZE * CELL_SIZE;
 
   return (
-    <div className={`relative ${isGameOver ? 'opacity-50' : ''} ${isPaused ? 'opacity-75' : ''}`}>
-      <div 
-        className="grid gap-[2px] bg-board p-4 rounded-lg mx-auto"
-        style={{
-          gridTemplateColumns: `repeat(${boardSize}, minmax(0, 1fr))`,
-          width: 'fit-content'
-        }}
-      >
-        {Array.from({ length: boardSize }, (_, y) =>
-          Array.from({ length: boardSize }, (_, x) => {
-            const pos = { x, y };
-            return (
-              <div
-                key={`${x}-${y}`}
-                className={`game-cell aspect-square rounded-sm ${getCellClass(pos)}`}
-                style={{
-                  width: '20px',
-                  height: '20px',
-                  ...getCellStyle(pos)
-                }}
-              />
-            );
-          })
-        )}
+    <div className="relative bg-gray-800 rounded-lg shadow-inner overflow-hidden"
+         style={{ width: boardSize, height: boardSize }}>
+      {/* Grid lines */}
+      <div className="absolute inset-0 opacity-10">
+        {Array.from({ length: GRID_SIZE }).map((_, i) => (
+          <div key={`h-${i}`}>
+            <div
+              className="absolute w-full h-px bg-gray-600"
+              style={{ top: i * CELL_SIZE }}
+            />
+            <div
+              className="absolute h-full w-px bg-gray-600"
+              style={{ left: i * CELL_SIZE }}
+            />
+          </div>
+        ))}
       </div>
 
-      {isPaused && !isGameOver && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="bg-black/80 text-white px-8 py-4 rounded-lg text-2xl font-bold">
-            ПАУЗА
+      {/* Snake */}
+      {gameState.snake.map((segment, index) => (
+        <div
+          key={index}
+          className={`game-cell ${index === 0 ? 'snake-head' : 'snake-body'} ${
+            index === 0 ? 'z-20' : 'z-10'
+          }`}
+          style={{
+            left: segment.x * CELL_SIZE,
+            top: segment.y * CELL_SIZE,
+            width: CELL_SIZE - 2,
+            height: CELL_SIZE - 2,
+            opacity: gameState.gameOver ? 0.5 : 1
+          }}
+        />
+      ))}
+
+      {/* Food */}
+      <div
+        className="game-cell food z-30"
+        style={{
+          left: gameState.food.x * CELL_SIZE + 2,
+          top: gameState.food.y * CELL_SIZE + 2,
+          width: CELL_SIZE - 4,
+          height: CELL_SIZE - 4
+        }}
+      />
+
+      {/* Game Over Overlay */}
+      {gameState.gameOver && (
+        <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-40">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-red-500 mb-2">Game Over!</h2>
+            <p className="text-xl text-gray-300 mb-4">Final Score: {gameState.score}</p>
+            <p className="text-gray-400">Press SPACE to play again</p>
+          </div>
+        </div>
+      )}
+
+      {/* Paused Overlay */}
+      {gameState.isPaused && !gameState.gameOver && (
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-40">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-yellow-500 mb-2">Paused</h2>
+            <p className="text-gray-400">Press SPACE to continue</p>
           </div>
         </div>
       )}

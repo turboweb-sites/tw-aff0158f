@@ -10,15 +10,14 @@ export interface GameState {
   food: Position;
   direction: Direction;
   nextDirection: Direction;
-  isGameOver: boolean;
+  gameOver: boolean;
   isPaused: boolean;
   score: number;
   highScore: number;
   speed: number;
 }
 
-export interface GameSettings {
-  boardSize: number;
-  initialSpeed: number;
-  speedIncrement: number;
-}
+export const GRID_SIZE = 20;
+export const CELL_SIZE = 20;
+export const INITIAL_SPEED = 150;
+export const SPEED_INCREMENT = 5;
